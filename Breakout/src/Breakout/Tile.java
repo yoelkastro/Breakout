@@ -1,20 +1,22 @@
 package Breakout;
 
+import java.awt.Point;
+
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-public class Tile extends Rectangle{
+public class Tile extends BreakoutObject{
 
 	private Color[] colors = {Color.WHITE, Color.CYAN, Color.LAWNGREEN, Color.YELLOW, Color.ORANGE, Color.RED, Color.BLACK};
 	
 	private int level;
-	private int direction;
-	private int velocity;
 	
-	public Tile(double x, double y, int width, int height, int level){
-		super((int) x, (int) y, width, height);
+	public Tile(int x, int y, int width, int height, int level){
+		this.direction = 0;
+		this.location = new Point(0, 0);
+		this.shape = new Rectangle(x, y, width, height);
 		this.level = level;
-		this.setFill(this.colors[this.level]);
+		this.shape.setFill(this.colors[this.level]);
 	}
 	
 	public Color getColor(){
@@ -22,11 +24,12 @@ public class Tile extends Rectangle{
 	}
 	
 	public String toString(){
-		return this.getX() + ", " + this.getY() + "; " + this.getColor().toString();
+		return this.location.getX() + ", " + this.location.getY() + "; " + this.getColor().toString();
 	}
 	
 	public void tick(){
-		this.setFill(this.colors[this.level]);
+		this.shape.setFill(this.colors[this.level]);
+		super.tick();
 	}
 	
 }

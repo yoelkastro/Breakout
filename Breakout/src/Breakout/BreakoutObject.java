@@ -1,15 +1,14 @@
 package Breakout;
 
 import java.awt.Point;
-import java.util.ArrayList;
 import javafx.scene.shape.Shape;
 
 public class BreakoutObject {
 
+	public Point location;
 	public Shape shape;
-	private int direction;
-	private int velocity;
-	private Point location;
+	protected int direction;
+	protected int velocity;
 	
 	public void setVelocity(int velocity){
 		this.velocity = velocity;
@@ -17,9 +16,11 @@ public class BreakoutObject {
 	
 	public void tick(){
 		this.location.translate((int) (velocity * Math.cos(this.toRadian(direction))), (int) (velocity * Math.sin(this.toRadian(direction))));
+		this.shape.setTranslateX(this.location.getX());
+		this.shape.setTranslateY(this.location.getY());
 	}
 	
-	private double toRadian(int degrees){
+	protected double toRadian(int degrees){
 		return (((double) degrees) / 180) * Math.PI;
 	}
 	
@@ -29,4 +30,11 @@ public class BreakoutObject {
 		
 	}
 	
+	public double getWidth(){
+		return this.shape.getBoundsInLocal().getMaxX() - this.shape.getBoundsInLocal().getMinX();
+	}
+	
+	public double getHeight(){
+		return this.shape.getBoundsInLocal().getMaxY() - this.shape.getBoundsInLocal().getMinY();
+	}
 }

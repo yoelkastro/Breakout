@@ -53,14 +53,14 @@ public class Breakout extends Application{
 		
 		this.tiles = new Tile[(this.TILE_COLUMNS * this.TILE_ROWS) + 1];
 		this.tiles[0] = new Paddle(this.PADDLE_Y, (int) (this.TILE_WIDTH * 1.5), (int) (this.TILE_HEIGHT / 1.5));
-		root.getChildren().add(this.tiles[0]);
+		root.getChildren().add(this.tiles[0].shape);
 		for(int y = 0; y < this.TILE_ROWS; y ++){
 			for(int x = 0; x < this.TILE_COLUMNS; x ++){
-				this.tiles[((y * this.TILE_ROWS) + x) + 1] = new Tile(this.TILE_FIRST_LOCATION.getX() + (this.TILE_WIDTH * x) + ((this.PANEL_WIDTH / this.TILE_MARGIN_RATIO)), 
-										this.TILE_FIRST_LOCATION.getY() - (this.TILE_HEIGHT * y) - ((this.PANEL_HEIGHT / this.TILE_MARGIN_RATIO)), 
+				this.tiles[((y * this.TILE_ROWS) + x) + 1] = new Tile((int) (this.TILE_FIRST_LOCATION.getX() + (this.TILE_WIDTH * x) + ((this.PANEL_WIDTH / this.TILE_MARGIN_RATIO))), 
+										(int) (this.TILE_FIRST_LOCATION.getY() - (this.TILE_HEIGHT * y) - ((this.PANEL_HEIGHT / this.TILE_MARGIN_RATIO))), 
 										this.TILE_WIDTH - (this.PANEL_WIDTH / this.TILE_MARGIN_RATIO), this.TILE_HEIGHT - (this.PANEL_HEIGHT / this.TILE_MARGIN_RATIO), (y / 2) + 1);
 				
-				root.getChildren().add(this.tiles[((y * this.TILE_ROWS) + x) + 1]);
+				root.getChildren().add(this.tiles[((y * this.TILE_ROWS) + x) + 1].shape);
 			}
 		}
 		
@@ -102,7 +102,7 @@ public class Breakout extends Application{
 	public void tick(){
 		
 		if(!isPaused){
-			this.tiles[0].setX(this.mouseX);
+			this.tiles[0].setVelocity((int) (((Math.abs((this.mouseX - (this.tiles[0].getWidth() / 2)) - this.tiles[0].location.getX()) <= Paddle.MAX_VELOCITY)? Math.abs((this.mouseX - (this.tiles[0].getWidth() / 2)) - this.tiles[0].location.getX()):Paddle.MAX_VELOCITY) * Math.signum(((this.mouseX - (this.tiles[0].getWidth() / 2)) - this.tiles[0].location.getX()))));
 			for(int i = 0; i < this.tiles.length; i ++){
 				this.tiles[i].tick();
 			}
