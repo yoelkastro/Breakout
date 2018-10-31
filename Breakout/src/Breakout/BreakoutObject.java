@@ -1,6 +1,8 @@
 package Breakout;
 
 import java.awt.Point;
+
+import javafx.geometry.Bounds;
 import javafx.scene.shape.Shape;
 
 public class BreakoutObject {
@@ -24,17 +26,31 @@ public class BreakoutObject {
 		return (((double) degrees) / 180) * Math.PI;
 	}
 	
-	public boolean isColliding(BreakoutObject go){
-		
-		return this.shape.getBoundsInLocal().intersects(go.shape.getBoundsInLocal());
-		
-	}
-	
 	public double getWidth(){
 		return this.shape.getBoundsInLocal().getMaxX() - this.shape.getBoundsInLocal().getMinX();
 	}
 	
 	public double getHeight(){
-		return this.shape.getBoundsInLocal().getMaxY() - this.shape.getBoundsInLocal().getMinY();
+		return this.getBounds().getMaxY() - this.getBounds().getMinY();
 	}
+	
+	public Bounds getBounds(){
+		return this.shape.getBoundsInLocal();
+	}
+	
+	public boolean isColliding(BreakoutObject go){
+		
+		boolean ret = this.shape.getBoundsInLocal().intersects(go.shape.getBoundsInLocal());
+		
+		if(ret){
+			this.reactToCollision(go);
+			go.reactToCollision(this);
+		}
+		
+		return ret;
+		
+	}
+	
+	public void reactToCollision(BreakoutObject go){}
+	
 }

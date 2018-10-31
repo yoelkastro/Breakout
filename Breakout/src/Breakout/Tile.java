@@ -23,13 +23,20 @@ public class Tile extends BreakoutObject{
 		return colors[level];
 	}
 	
+	@Override
 	public String toString(){
 		return this.location.getX() + ", " + this.location.getY() + "; " + this.getColor().toString();
 	}
 	
+	@Override
 	public void tick(){
 		this.shape.setFill(this.colors[this.level]);
 		super.tick();
+	}
+	
+	@Override
+	public void reactToCollision(BreakoutObject go){
+		if(go instanceof Ball) this.level --;
 	}
 	
 }
