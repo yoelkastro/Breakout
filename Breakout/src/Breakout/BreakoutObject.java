@@ -17,9 +17,12 @@ public class BreakoutObject {
 	}
 	
 	public void tick(){
+		
 		this.location.translate((int) (velocity * Math.cos(this.toRadian(direction))), (int) (velocity * Math.sin(this.toRadian(direction))));
 		this.shape.setTranslateX(this.location.getX());
 		this.shape.setTranslateY(this.location.getY());
+		//this.shape.setLayoutX(this.location.getX());
+		//this.shape.setLayoutY(this.location.getY());
 	}
 	
 	protected double toRadian(int degrees){
@@ -35,12 +38,12 @@ public class BreakoutObject {
 	}
 	
 	public Bounds getBounds(){
-		return this.shape.getBoundsInLocal();
+		return this.shape.getBoundsInParent();
 	}
 	
 	public boolean isColliding(BreakoutObject go){
 		
-		boolean ret = this.shape.getBoundsInLocal().intersects(go.shape.getBoundsInLocal());
+		boolean ret = this.getBounds().intersects(go.getBounds());
 		
 		if(ret){
 			this.reactToCollision(go);

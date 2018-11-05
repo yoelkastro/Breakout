@@ -25,12 +25,15 @@ public class Breakout extends Application{
 	final Point TILE_FIRST_LOCATION = new Point(0, (int) (PANEL_HEIGHT / 2.3) - (PANEL_HEIGHT / TILE_MARGIN_RATIO));
 	final int PADDLE_Y = (int) (PANEL_HEIGHT / 1.2);
 	
+	private int ticks = 0;
+	
 	private Scene scene;
 	private Canvas canvas;
 	private int mouseX;
 	private boolean isPaused;
 	private Ball ball;
 	private Tile[] tiles;
+	private Tile[] collision = {new Tile(0, 0, 1, this.PANEL_HEIGHT, 6), new Tile(this.PANEL_WIDTH - 1, 0, 1, this.PANEL_HEIGHT, 6), new Tile(0, 0, this.PANEL_WIDTH, 1, 6)};
 	
 	public static void main(String[] args){
 		launch(args);
@@ -51,8 +54,12 @@ public class Breakout extends Application{
 		
 		stage.show();
 		
+		this.ball = new Ball(this.PANEL_WIDTH / 2, (this.PANEL_HEIGHT / 2), 15);
+		this.ball.shape.toFront();
+		root.getChildren().add(this.ball.shape);
+		
 		this.tiles = new Tile[(this.TILE_COLUMNS * this.TILE_ROWS) + 1];
-		this.tiles[0] = new Paddle(this.PADDLE_Y, (int) (this.TILE_WIDTH * 1.5), (int) (this.TILE_HEIGHT / 1.5));
+		this.tiles[0] = new Paddle(this.PANEL_WIDTH / 2, this.PADDLE_Y, (int) (this.TILE_WIDTH * 1.5), (int) (this.TILE_HEIGHT / 1.5));
 		root.getChildren().add(this.tiles[0].shape);
 		for(int y = 0; y < this.TILE_ROWS; y ++){
 			for(int x = 0; x < this.TILE_COLUMNS; x ++){
@@ -60,8 +67,13 @@ public class Breakout extends Application{
 										(int) (this.TILE_FIRST_LOCATION.getY() - (this.TILE_HEIGHT * y) - ((this.PANEL_HEIGHT / this.TILE_MARGIN_RATIO))), 
 										this.TILE_WIDTH - (this.PANEL_WIDTH / this.TILE_MARGIN_RATIO), this.TILE_HEIGHT - (this.PANEL_HEIGHT / this.TILE_MARGIN_RATIO), (y / 2) + 1);
 				
+				this.tiles[((y * this.TILE_ROWS) + x) + 1].shape.toBack();
 				root.getChildren().add(this.tiles[((y * this.TILE_ROWS) + x) + 1].shape);
 			}
+		}
+		
+		for(int i = 0; i < this.collision.length; i ++){
+			root.getChildren().add(this.collision[i].shape);
 		}
 		
 		scene.setOnMouseMoved(new EventHandler<MouseEvent>(){
@@ -90,7 +102,7 @@ public class Breakout extends Application{
 		Timeline t = new Timeline();
 		t.setCycleCount(Timeline.INDEFINITE);
 		
-		KeyFrame kf = new KeyFrame(Duration.millis(25), ae -> {
+		KeyFrame kf = new KeyFrame(Duration.millis(1000 / 60), ae -> {
 			tick();
 		});
 		
@@ -105,7 +117,17 @@ public class Breakout extends Application{
 			this.tiles[0].setVelocity((int) (((Math.abs((this.mouseX - (this.tiles[0].getWidth() / 2)) - this.tiles[0].location.getX()) <= Paddle.MAX_VELOCITY)? Math.abs((this.mouseX - (this.tiles[0].getWidth() / 2)) - this.tiles[0].location.getX()):Paddle.MAX_VELOCITY) * Math.signum(((this.mouseX - (this.tiles[0].getWidth() / 2)) - this.tiles[0].location.getX()))));
 			for(int i = 0; i < this.tiles.length; i ++){
 				this.tiles[i].tick();
+				this.tiles[i].isColliding(this.ball);
 			}
+			for(int i = 0; i < this.collision.length; i ++){
+				this.collision[i].isColliding(this.ball);
+			}
+			
+			if(this.ticks > 60){
+				this.ball.tick();
+			}
+			
+			ticks ++;
 		}
 		
 	}
