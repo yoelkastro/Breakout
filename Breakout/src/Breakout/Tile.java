@@ -2,46 +2,36 @@ package Breakout;
 
 import java.awt.Point;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Rectangle;
 
 public class Tile extends BreakoutObject{
 
-	private Color[] colors = {Color.WHITE, Color.CYAN, Color.LAWNGREEN, Color.YELLOW, Color.ORANGE, Color.RED, Color.BLACK};
+	private Color[] colors = {Color.WHITE, Color.CYAN, Color.LAWNGREEN, Color.YELLOW, Color.ORANGE, Color.RED, Color.BLACK};	//Colors for each stage, white if destroyed, black is indestructable
 	
-	private int level;
+	private int level;	//The current level of the Tile
 	
 	public Tile(int x, int y, int width, int height, int level){
-		this.direction = 0;
 		this.location = new Point(x, y);
 		
-		this.shape = new Polygon();
-		((Polygon) this.shape).getPoints().addAll(new Double[]{0., 0., 0. + width, 0., 0. + width, 0. + height, 0., 0. + height});
-	
+		this.shape = new Rectangle(0, 0, width, height);
+		
 		this.level = level;
 		this.shape.setFill(this.colors[this.level]);
 
 		this.tick();
 	}
 	
-	public Color getColor(){
+	public Color getColor(){	//Returns current color of the Tile
 		return colors[level];
 	}
 	
-	public Line[] getSides(){
-		return new Line[]{new Line(((Polygon) this.shape).getPoints().get(0), ((Polygon) this.shape).getPoints().get(1), ((Polygon) this.shape).getPoints().get(2), ((Polygon) this.shape).getPoints().get(3)), 
-				new Line(((Polygon) this.shape).getPoints().get(2), ((Polygon) this.shape).getPoints().get(3), ((Polygon) this.shape).getPoints().get(4), ((Polygon) this.shape).getPoints().get(5)),
-				new Line(((Polygon) this.shape).getPoints().get(4), ((Polygon) this.shape).getPoints().get(5), ((Polygon) this.shape).getPoints().get(6), ((Polygon) this.shape).getPoints().get(7)),
-				new Line(((Polygon) this.shape).getPoints().get(6), ((Polygon) this.shape).getPoints().get(7), ((Polygon) this.shape).getPoints().get(0), ((Polygon) this.shape).getPoints().get(1))};
-	}
-	
 	@Override
-	public String toString(){
+	public String toString(){	//Returns position and color as a string
 		return this.location.getX() + ", " + this.location.getY() + "; " + this.getColor().toString();
 	}
 	
 	@Override
-	public void tick(){
+	public void tick(){	//Updates color
 			
 		this.shape.setFill(this.colors[this.level]);
 		super.tick();
@@ -49,7 +39,7 @@ public class Tile extends BreakoutObject{
 	}
 	
 	@Override
-	public void reactToCollision(BreakoutObject go){
+	public void reactToCollision(BreakoutObject go){	//Decreases level if hit by a Ball
 		if(go instanceof Ball && this.level > 0 && this.level != colors.length - 1) this.level --;
 	}
 	
