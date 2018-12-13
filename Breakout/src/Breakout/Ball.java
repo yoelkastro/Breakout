@@ -59,7 +59,7 @@ public class Ball extends BreakoutObject{
 				this.xVelocity *= -1;	//If the ball hit from the side, reverse x velocity
 			}
 			
-			if((this.xVelocity * this.xVelocity) + (this.yVelocity * this.yVelocity) != this.BALL_VELOCITY * this.BALL_VELOCITY){	//Sets the total ball velocity back to its maximum value if exceeded
+			if((this.xVelocity * this.xVelocity) + (this.yVelocity * this.yVelocity) != this.BALL_VELOCITY * this.BALL_VELOCITY){	//Sets the total ball velocity back to 
 				this.xVelocity /= Math.sqrt(((this.xVelocity * this.xVelocity) + (this.yVelocity * this.yVelocity)) / (this.BALL_VELOCITY * this.BALL_VELOCITY));
 				this.yVelocity /= Math.sqrt(((this.xVelocity * this.xVelocity) + (this.yVelocity * this.yVelocity)) / (this.BALL_VELOCITY * this.BALL_VELOCITY));
 			}

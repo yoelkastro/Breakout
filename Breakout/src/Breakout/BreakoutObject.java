@@ -1,7 +1,6 @@
 package Breakout;
 
 import java.awt.Point;
-
 import javafx.geometry.Bounds;
 import javafx.scene.shape.Shape;
 
